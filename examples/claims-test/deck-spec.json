@@ -1,0 +1,285 @@
+{
+  "deck": {
+    "title": "Claims Handling Change Journeys: First Notice of Loss to Settlement",
+    "kicker": "Northwind Mutual · Claims Transformation Alignment Deck",
+    "alignment_label": "Stakeholder Alignment",
+    "app": { "base_url": "https://claims.northwindmutual.example" }
+  },
+  "personas": [
+    {
+      "id": "handling",
+      "short_role": "Claims Adjuster",
+      "tab_label": "Claims Handling",
+      "tab_icon": "clipboard",
+      "role_title": "Claims Intake Agent & Claims Adjuster",
+      "location": "Regional Contact Centre & Claims Operations",
+      "mission": "Captures the loss event, confirms coverage against the policy, and validates the repair estimate so that each claim starts clean and moves to settlement without rework.",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80",
+        "alt": "Claims adjuster team working at a contact centre"
+      },
+      "slides": [
+        {
+          "num": "1.1",
+          "title": "First Notice of Loss: Intake Normalisation",
+          "icon": "file",
+          "stage_badge": "Step T1 Intake normalisation",
+          "as_is": {
+            "head_left": "As-Is Manual Baseline (SOP S1)",
+            "head_right": "Retyped Paper Notes",
+            "body": "Call-centre agents retype caller details from paper notes into the claims core. Average handling time is 22 minutes and 14% of records contain data-entry errors."
+          },
+          "to_be": {
+            "head_left": "Target To-Be Execution",
+            "head_right": "Agent-Structured Claim Event",
+            "body": "The intake agent structures the call into a claim event record and the human agent only confirms the summary. Target is 9 minutes handling time and under 2% entry errors."
+          },
+          "graphic": {
+            "title": "Intake Handling Time and Error Rate: As-Is vs Target",
+            "icon": "clock",
+            "svg": "<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='70' y='34' width='70' height='96' rx='3' fill='#ef4444'/><text x='105' y='28' font-size='11' font-weight='800' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>22 min</text><text x='105' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is handling</text><rect x='160' y='91' width='70' height='39' rx='3' fill='#10b981'/><text x='195' y='85' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>9 min</text><text x='195' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Target handling</text><rect x='270' y='70' width='70' height='60' rx='3' fill='#f59e0b'/><text x='305' y='64' font-size='11' font-weight='800' font-family='sans-serif' fill='#92400e' text-anchor='middle'>14%</text><text x='305' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is entry errors</text><rect x='360' y='123' width='70' height='7' rx='2' fill='#10b981'/><text x='395' y='117' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>under 2%</text><text x='395' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Target errors</text>"
+          },
+          "wireframe": {
+            "url_path": "intake/claims/CLM-2026-004417",
+            "role_badge": "Claims Intake Agent",
+            "sidebar": ["Claim Event", "Policy", "Parties", "Audit"],
+            "active_sidebar": "Claim Event",
+            "section_title": "Claim CLM-2026-004417 · Rear-end collision",
+            "status": { "text": "Summary Ready", "tone": "amber" },
+            "table": {
+              "headers": ["Field", "Captured Value", "Source", "Confidence"],
+              "rows": [
+                ["Date of loss", "2026-10-02 08:40", "Call transcript", { "text": "High", "tone": "green" }],
+                ["Location", "Route 9, northbound exit 14", "Call transcript", { "text": "High", "tone": "green" }],
+                ["Vehicle", "2021 Hatchback, plate on file", "Policy match", { "text": "High", "tone": "green" }],
+                ["Injuries reported", "None stated", "Call transcript", { "text": "Confirm with caller", "tone": "amber" }]
+              ]
+            },
+            "actions": ["Edit Field", "Confirm Summary & Open Claim"]
+          },
+          "signoff_text": "Intake Normalisation Approved",
+          "owner": "Claims Intake Agent"
+        },
+        {
+          "num": "1.2",
+          "title": "Coverage Verification with Clause Citations",
+          "icon": "shield",
+          "stage_badge": "Step T2 Coverage verification",
+          "as_is": {
+            "head_left": "As-Is Manual Baseline (SOP S2)",
+            "head_right": "Manual PDF Policy Reading",
+            "body": "The adjuster reads the PDF policy by hand to confirm coverage and deductible, adding about 1.5 days before any other work can start."
+          },
+          "to_be": {
+            "head_left": "Target To-Be Execution",
+            "head_right": "Cited Coverage Decision",
+            "body": "The coverage agent reads the policy and returns the coverage result with clause citations. The adjuster accepts or overrides in one action."
+          },
+          "graphic": {
+            "title": "Coverage Check Elapsed Time: As-Is vs Target",
+            "icon": "clock",
+            "svg": "<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='80' y='40' width='120' height='36' rx='3' fill='#ef4444'/><text x='140' y='62' font-size='11' font-weight='800' font-family='sans-serif' fill='#ffffff' text-anchor='middle'>About 1.5 days</text><text x='140' y='95' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is manual policy read</text><rect x='260' y='40' width='20' height='36' rx='3' fill='#10b981'/><text x='300' y='62' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46'>Minutes, cited</text><text x='300' y='95' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155'>To-Be agent read</text><rect x='80' y='108' width='350' height='16' rx='3' fill='#eff6ff' stroke='#bfdbfe'/><text x='255' y='120' font-size='9' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>Human decision retained: accept or override</text>"
+          },
+          "wireframe": {
+            "url_path": "coverage/CLM-2026-004417",
+            "role_badge": "Claims Adjuster",
+            "sidebar": ["Coverage", "Policy Text", "Deductible", "Decision"],
+            "active_sidebar": "Coverage",
+            "section_title": "Coverage result for CLM-2026-004417",
+            "status": { "text": "Covered", "tone": "green" },
+            "table": {
+              "headers": ["Item", "Result", "Policy Clause", "Note"],
+              "rows": [
+                ["Collision coverage", { "text": "Included", "tone": "green" }, "Section 4.2", "Active on date of loss"],
+                ["Deductible", "500", "Schedule A", "Applies to collision"],
+                ["Rental reimbursement", { "text": "Included", "tone": "green" }, "Section 6.1", "Up to 30 days"],
+                ["Exclusions", { "text": "None triggered", "tone": "green" }, "Section 9", "Checked 12 exclusions"]
+              ]
+            },
+            "actions": ["Override Coverage", "Accept Coverage Decision"]
+          },
+          "signoff_text": "Coverage Verification Approved",
+          "owner": "Claims Adjuster"
+        },
+        {
+          "num": "1.3",
+          "title": "Estimate Reconciliation Against Regional Benchmark",
+          "icon": "chart",
+          "stage_badge": "Step T4 Estimate reconciliation",
+          "as_is": {
+            "head_left": "As-Is Manual Baseline (SOP S4)",
+            "head_right": "Estimates by Fax and Email",
+            "body": "The adjuster waits for the body-shop estimate by fax or email, and variance against actual repair cost is only reviewed monthly."
+          },
+          "to_be": {
+            "head_left": "Target To-Be Execution",
+            "head_right": "Benchmark Flag at Submission",
+            "body": "The estimate agent compares each estimate to the regional benchmark and flags any variance above 15% before the adjuster approves."
+          },
+          "graphic": {
+            "title": "Estimate vs Regional Benchmark with 15% Tolerance Band",
+            "icon": "chart",
+            "svg": "<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='40' y='60' width='400' height='30' fill='#ecfdf5' stroke='#a7f3d0'/><text x='436' y='56' font-size='9' font-weight='700' font-family='sans-serif' fill='#065f46' text-anchor='end'>Tolerance band: benchmark plus or minus 15%</text><line x1='40' y1='75' x2='440' y2='75' stroke='#1e3a8a' stroke-width='1.5' stroke-dasharray='4 3'/><circle cx='110' cy='78' r='7' fill='#10b981'/><circle cx='200' cy='70' r='7' fill='#10b981'/><circle cx='290' cy='82' r='7' fill='#10b981'/><circle cx='380' cy='36' r='8' fill='#ef4444'/><text x='380' y='22' font-size='9' font-weight='800' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>Flag: +22%</text><text x='110' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop A</text><text x='200' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop B</text><text x='290' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop C</text><text x='380' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop D</text>"
+          },
+          "wireframe": {
+            "url_path": "estimates/CLM-2026-004417",
+            "role_badge": "Claims Adjuster",
+            "sidebar": ["Estimates", "Benchmark", "Photos", "Decision"],
+            "active_sidebar": "Benchmark",
+            "section_title": "Estimate review for CLM-2026-004417",
+            "status": { "text": "1 Flag", "tone": "amber" },
+            "table": {
+              "headers": ["Body Shop", "Estimate", "Benchmark", "Variance"],
+              "rows": [
+                ["Shop A", "3,820", "3,900", { "text": "-2%", "tone": "green" }],
+                ["Shop B", "4,010", "3,900", { "text": "+3%", "tone": "green" }],
+                ["Shop C", "3,650", "3,900", { "text": "-6%", "tone": "green" }],
+                ["Shop D", "4,760", "3,900", { "text": "+22% over tolerance", "tone": "amber" }]
+              ]
+            },
+            "actions": ["Request Revised Estimate", "Approve Estimate"]
+          },
+          "signoff_text": "Estimate Reconciliation Approved",
+          "owner": "Claims Adjuster"
+        }
+      ]
+    },
+    {
+      "id": "risk",
+      "short_role": "Claims Manager",
+      "tab_label": "Risk, Authority & Payout",
+      "tab_icon": "dollar",
+      "role_title": "SIU Investigator, Claims Manager & Claims Finance Analyst",
+      "location": "Special Investigations Unit, Claims Management & Finance",
+      "mission": "Screens every claim for fraud, approves settlements within delegated authority, and releases payment without duplicates.",
+      "image": {
+        "url": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
+        "alt": "Claims management team in a review meeting"
+      },
+      "slides": [
+        {
+          "num": "2.1",
+          "title": "Fraud Pre-Scoring on Every Claim",
+          "icon": "shield",
+          "stage_badge": "Step T3 Fraud pre-score",
+          "as_is": {
+            "head_left": "As-Is Manual Baseline (SOP S3)",
+            "head_right": "Email Referrals to SIU",
+            "body": "Fraud screening is handled by email to the Special Investigations Unit, so only 8% of claims are screened before payment."
+          },
+          "to_be": {
+            "head_left": "Target To-Be Execution",
+            "head_right": "100% Scored, Humans Review High Scores",
+            "body": "The fraud agent scores every claim through the external scoring service. The SIU investigator reviews only claims scoring 70 or higher."
+          },
+          "graphic": {
+            "title": "Fraud Screening Coverage and Score Threshold",
+            "icon": "shield",
+            "svg": "<rect x='40' y='30' width='400' height='22' rx='3' fill='#f1f5f9' stroke='#cbd5e1'/><rect x='40' y='30' width='32' height='22' rx='3' fill='#ef4444'/><text x='46' y='24' font-size='9' font-weight='700' font-family='sans-serif' fill='#991b1b'>As-Is: 8% screened</text><rect x='40' y='80' width='400' height='22' rx='3' fill='#10b981'/><text x='46' y='74' font-size='9' font-weight='700' font-family='sans-serif' fill='#065f46'>To-Be: 100% scored</text><line x1='40' y1='128' x2='440' y2='128' stroke='#cbd5e1' stroke-width='1.5'/><line x1='320' y1='118' x2='320' y2='138' stroke='#ef4444' stroke-width='2'/><text x='320' y='150' font-size='9' font-weight='700' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>Score 70: SIU review</text><text x='40' y='150' font-size='9' font-family='sans-serif' fill='#64748b'>0</text><text x='440' y='150' font-size='9' font-family='sans-serif' fill='#64748b' text-anchor='end'>100</text>"
+          },
+          "wireframe": {
+            "url_path": "siu/queue",
+            "role_badge": "SIU Investigator",
+            "sidebar": ["Review Queue", "Score Detail", "Evidence", "Decision"],
+            "active_sidebar": "Review Queue",
+            "section_title": "Claims with fraud score of 70 or higher",
+            "status": { "text": "3 To Review", "tone": "amber" },
+            "table": {
+              "headers": ["Claim", "Score", "Top Signal", "Status"],
+              "rows": [
+                ["CLM-2026-004102", { "text": "88", "tone": "amber" }, "Repeated address across 4 claims", "Open"],
+                ["CLM-2026-004289", { "text": "76", "tone": "amber" }, "Loss reported 3 days after policy start", "Open"],
+                ["CLM-2026-004390", { "text": "71", "tone": "amber" }, "Estimate far above benchmark", "In review"]
+              ]
+            },
+            "actions": ["Clear Claim", "Escalate to Investigation"]
+          },
+          "signoff_text": "Fraud Pre-Scoring Approved",
+          "owner": "SIU Investigator"
+        },
+        {
+          "num": "2.2",
+          "title": "Settlement Authority Routing",
+          "icon": "briefcase",
+          "stage_badge": "Step T5 Authority routing",
+          "as_is": {
+            "head_left": "As-Is Manual Baseline (SOP S5)",
+            "head_right": "Spreadsheet Authority Limits",
+            "body": "Authority limits live in a spreadsheet and claims above limit are routed by email, giving a 6.2 day average settlement cycle."
+          },
+          "to_be": {
+            "head_left": "Target To-Be Execution",
+            "head_right": "Rule-Based Routing to the Right Approver",
+            "body": "The authority agent routes each settlement by amount: up to 5,000 to the adjuster, up to 25,000 to the team lead, above that to the claims manager. Target cycle is 2.5 days."
+          },
+          "graphic": {
+            "title": "Settlement Authority Tiers and Cycle Time",
+            "icon": "briefcase",
+            "svg": "<rect x='40' y='100' width='120' height='30' rx='3' fill='#eff6ff' stroke='#bfdbfe'/><text x='100' y='119' font-size='9.5' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>Up to 5,000: Adjuster</text><rect x='170' y='70' width='120' height='60' rx='3' fill='#dbeafe' stroke='#93c5fd'/><text x='230' y='104' font-size='9.5' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>Up to 25,000: Team lead</text><rect x='300' y='40' width='130' height='90' rx='3' fill='#1e3a8a'/><text x='365' y='89' font-size='9.5' font-weight='700' font-family='sans-serif' fill='#ffffff' text-anchor='middle'>Above: Claims manager</text><text x='40' y='28' font-size='10' font-weight='800' font-family='sans-serif' fill='#991b1b'>Cycle 6.2 days</text><text x='160' y='28' font-size='10' font-weight='800' font-family='sans-serif' fill='#334155'>to</text><text x='185' y='28' font-size='10' font-weight='800' font-family='sans-serif' fill='#065f46'>2.5 days target</text>"
+          },
+          "wireframe": {
+            "url_path": "authority/CLM-2026-004417",
+            "role_badge": "Claims Manager",
+            "sidebar": ["Approvals", "Authority Rules", "History", "Audit"],
+            "active_sidebar": "Approvals",
+            "section_title": "Settlement approval for CLM-2026-004417",
+            "status": { "text": "Awaiting Approver", "tone": "amber" },
+            "table": {
+              "headers": ["Item", "Value", "Rule Applied", "Routed To"],
+              "rows": [
+                ["Settlement amount", "31,400", "Above 25,000", "Claims Manager"],
+                ["Fraud score", "22", "Below 70", "No SIU review"],
+                ["Coverage", "Confirmed", "Clause 4.2", "Adjuster accepted"],
+                ["Estimate variance", "-2%", "Within 15%", "Adjuster approved"]
+              ]
+            },
+            "actions": ["Return to Adjuster", "Approve Settlement"]
+          },
+          "signoff_text": "Authority Routing Approved",
+          "owner": "Claims Manager"
+        },
+        {
+          "num": "2.3",
+          "title": "Payout Release with Duplicate Check",
+          "icon": "dollar",
+          "stage_badge": "Step T6 Payout release",
+          "as_is": {
+            "head_left": "As-Is Manual Baseline (SOP S6)",
+            "head_right": "Manually Keyed Payments",
+            "body": "Finance keys each payment by hand, and duplicate payments are found in 0.7% of payouts."
+          },
+          "to_be": {
+            "head_left": "Target To-Be Execution",
+            "head_right": "Agent-Prepared Payment, Human Release",
+            "body": "The payment agent prepares the payment in the treasury system with an automatic duplicate check. The finance analyst releases it. Target is zero duplicate payments."
+          },
+          "graphic": {
+            "title": "Duplicate Payment Rate: As-Is vs Target",
+            "icon": "dollar",
+            "svg": "<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='120' y='60' width='90' height='70' rx='3' fill='#ef4444'/><text x='165' y='54' font-size='12' font-weight='800' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>0.7%</text><text x='165' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is duplicates</text><rect x='270' y='127' width='90' height='3' rx='1' fill='#10b981'/><text x='315' y='120' font-size='12' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>0%</text><text x='315' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Target duplicates</text>"
+          },
+          "wireframe": {
+            "url_path": "payments/CLM-2026-004417",
+            "role_badge": "Claims Finance Analyst",
+            "sidebar": ["Payments", "Duplicate Check", "Payee", "Audit"],
+            "active_sidebar": "Payments",
+            "section_title": "Payment for CLM-2026-004417",
+            "status": { "text": "Duplicate Check Clear", "tone": "green" },
+            "table": {
+              "headers": ["Check", "Result", "Detail", "Owner"],
+              "rows": [
+                ["Approval on file", { "text": "Yes", "tone": "green" }, "Claims Manager, 31,400", "Authority agent"],
+                ["Duplicate payment", { "text": "None found", "tone": "green" }, "Checked payee, amount, claim", "Payment agent"],
+                ["Payee details", { "text": "Verified", "tone": "green" }, "Matches policy holder", "Payment agent"],
+                ["Release", { "text": "Waiting", "tone": "amber" }, "Human release required", "Finance Analyst"]
+              ]
+            },
+            "actions": ["Hold Payment", "Release Payment"]
+          },
+          "signoff_text": "Payout Release Approved",
+          "owner": "Claims Finance Analyst"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claims Handling Change Journeys: First Notice of Loss to Settlement</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --slide-bg: #ffffff;
+      --surface: #f8fafc;
+      --surface-dark: #1e293b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #334155;
+      --text-light: #64748b;
+      --navy: #1e3a8a;
+      --navy-light: #eff6ff;
+      --navy-border: #bfdbfe;
+      --forest: #065f46;
+      --forest-light: #ecfdf5;
+      --forest-border: #a7f3d0;
+      --crimson: #991b1b;
+      --crimson-light: #fef2f2;
+      --crimson-border: #fecaca;
+      --amber: #92400e;
+      --amber-light: #fffbeb;
+      --amber-border: #fde68a;
+      --blue: #2563eb;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* Executive Top Bar */
+    .deck-topbar {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .deck-title-group h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.3px;
+    }
+    .deck-kicker {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Alignment Tracker Bar */
+    .alignment-bar {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #ffffff;
+    }
+    .alignment-label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .alignment-meter-wrap {
+      flex: 1;
+      min-width: 240px;
+      max-width: 480px;
+    }
+    .alignment-meter {
+      background: #334155;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+    .alignment-fill {
+      background: #10b981;
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .alignment-stat {
+      font-size: 13px;
+      font-weight: 800;
+      color: #34d399;
+    }
+
+    /* Role Nav Buttons */
+    .role-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .role-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .role-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .role-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+    }
+    .role-btn svg { flex-shrink: 0; }
+
+    /* Role Panels */
+    .role-panel { display: none; }
+    .role-panel.active { display: block; }
+
+    /* Persona Hero with Business Photography */
+    .persona-hero {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    @media (max-width: 900px) {
+      .persona-hero { grid-template-columns: 1fr; }
+    }
+    .persona-img-wrap {
+      width: 100%;
+      height: 180px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-dark);
+      background: #f1f5f9;
+    }
+    .persona-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .persona-role-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .persona-dept {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .persona-mission {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* 16:9 Presentation Slide Card */
+    .slide-canvas {
+      background: var(--slide-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .slide-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .slide-num-tag {
+      background: var(--navy-light);
+      color: var(--navy);
+      border: 1px solid var(--navy-border);
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .slide-main-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .slide-stage-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-light);
+      background: var(--surface);
+      border: 1px solid var(--border-dark);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* WIDESCREEN 16:9 PRESENTATION GRID */
+    .slide-content-grid {
+      display: grid;
+      grid-template-columns: 46% 54%;
+      gap: 22px;
+      align-items: stretch;
+    }
+    @media (max-width: 1080px) {
+      .slide-content-grid { grid-template-columns: 1fr; }
+    }
+
+    /* LEFT SIDE: BEFORE/AFTER CONTRAST & BESPOKE SVG GRAPHIC */
+    .left-insights-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contrast-box {
+      border-radius: 6px;
+      padding: 12px 14px;
+      border: 1px solid;
+    }
+    .contrast-box.before {
+      background: var(--crimson-light);
+      border-color: var(--crimson-border);
+    }
+    .contrast-box.after {
+      background: var(--forest-light);
+      border-color: var(--forest-border);
+    }
+
+    .contrast-head {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .before .contrast-head { color: var(--crimson); }
+    .after .contrast-head { color: var(--forest); }
+
+    .contrast-body {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    /* BESPOKE TOPIC GRAPHIC CONTAINER */
+    .topic-graphic-card {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .graphic-head {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+    .graphic-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .graphic-svg {
+      width: 100%;
+      height: auto;
+      max-height: 180px;
+    }
+
+    /* RIGHT SIDE: EXPANSIVE ENTERPRISE SOFTWARE WIREFRAME */
+    .wireframe-full-card {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .app-chrome {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      border-bottom: 1px solid #334155;
+    }
+    .chrome-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chrome-dots {
+      display: flex;
+      gap: 4px;
+    }
+    .chrome-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #475569;
+    }
+    .chrome-url {
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+    }
+    .chrome-role-badge {
+      background: #334155;
+      color: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+
+    .app-workspace {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      min-height: 290px;
+      background: #ffffff;
+    }
+    @media (max-width: 600px) {
+      .app-workspace { grid-template-columns: 1fr; }
+    }
+
+    .app-sidebar {
+      background: #f8fafc;
+      border-right: 1px solid var(--border);
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-item {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-light);
+      padding: 6px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .sidebar-item.active {
+      background: var(--navy-light);
+      color: var(--navy);
+      border: 1px solid var(--navy-border);
+    }
+
+    .app-canvas {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      background: #ffffff;
+    }
+
+    .app-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid;
+    }
+    .badge-green { background: var(--forest-light); color: var(--forest); border-color: var(--forest-border); }
+    .badge-amber { background: var(--amber-light); color: var(--amber); border-color: var(--amber-border); }
+    .badge-navy { background: var(--navy-light); color: var(--navy); border-color: var(--navy-border); }
+
+    .app-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .app-table th {
+      background: #f8fafc;
+      border: 1px solid var(--border-dark);
+      padding: 5px 8px;
+      text-align: left;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+    .app-table td {
+      border: 1px solid var(--border-dark);
+      padding: 5px 8px;
+    }
+
+    .app-action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      align-items: center;
+    }
+    .app-btn {
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-primary { background: var(--navy); color: #ffffff; border-color: var(--navy); }
+    .btn-secondary { background: #ffffff; color: var(--text); border-color: var(--border-dark); }
+    .btn-danger { background: var(--crimson); color: #ffffff; border-color: var(--crimson); }
+
+    /* Slide Bottom Sign-Off Bar */
+    .slide-footer-bar {
+      border-top: 2px solid var(--border);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .signoff-label {
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .signoff-box {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--forest);
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="deck-topbar">
+    <div class="deck-title-group">
+      <div class="deck-kicker">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Northwind Mutual · Claims Transformation Alignment Deck
+      </div>
+      <h1>Claims Handling Change Journeys: First Notice of Loss to Settlement</h1>
+    </div>
+  </div>
+
+  <div class="alignment-bar">
+    <div class="alignment-label">
+      Stakeholder Alignment: <span id="alignment-counter" style="color:#38bdf8;">0 of 6 Slides Signed Off</span>
+    </div>
+    <div class="alignment-meter-wrap">
+      <div class="alignment-meter">
+        <div id="alignment-fill" class="alignment-fill"></div>
+      </div>
+    </div>
+    <div class="alignment-stat" id="alignment-pct">0% Complete</div>
+  </div>
+
+  <div class="role-nav">
+    <button class="role-btn active" data-role="handling" onclick="showRole('handling')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Claims Handling</button>
+    <button class="role-btn" data-role="risk" onclick="showRole('risk')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Risk, Authority &amp; Payout</button>
+  </div>
+
+
+  <div id="role-handling" class="role-panel active">
+    <div class="persona-hero">
+      <div class="persona-img-wrap"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Claims adjuster team working at a contact centre" class="persona-img"></div>
+      <div class="persona-info">
+        <div class="persona-role-title">Claims Intake Agent &amp; Claims Adjuster</div>
+        <div class="persona-dept"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Regional Contact Centre &amp; Claims Operations</div>
+        <div class="persona-mission">Captures the loss event, confirms coverage against the policy, and validates the repair estimate so that each claim starts clean and moves to settlement without rework.</div>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 1.1</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> First Notice of Loss: Intake Normalisation</span>
+        </div>
+        <span class="slide-stage-badge">Step T1 Intake normalisation</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP S1)</span><span>Retyped Paper Notes</span></div><div class="contrast-body">Call-centre agents retype caller details from paper notes into the claims core. Average handling time is 22 minutes and 14% of records contain data-entry errors.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>Agent-Structured Claim Event</span></div><div class="contrast-body">The intake agent structures the call into a claim event record and the human agent only confirms the summary. Target is 9 minutes handling time and under 2% entry errors.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Intake Handling Time and Error Rate: As-Is vs Target</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='70' y='34' width='70' height='96' rx='3' fill='#ef4444'/><text x='105' y='28' font-size='11' font-weight='800' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>22 min</text><text x='105' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is handling</text><rect x='160' y='91' width='70' height='39' rx='3' fill='#10b981'/><text x='195' y='85' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>9 min</text><text x='195' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Target handling</text><rect x='270' y='70' width='70' height='60' rx='3' fill='#f59e0b'/><text x='305' y='64' font-size='11' font-weight='800' font-family='sans-serif' fill='#92400e' text-anchor='middle'>14%</text><text x='305' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is entry errors</text><rect x='360' y='123' width='70' height='7' rx='2' fill='#10b981'/><text x='395' y='117' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>under 2%</text><text x='395' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Target errors</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://claims.northwindmutual.example/intake/claims/CLM-2026-004417</div>
+            </div>
+            <span class="chrome-role-badge">Role: Claims Intake Agent</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item active">Claim Event</div><div class="sidebar-item">Policy</div><div class="sidebar-item">Parties</div><div class="sidebar-item">Audit</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Claim CLM-2026-004417 · Rear-end collision</span><span class="status-badge badge-amber">Summary Ready</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Field</th><th>Captured Value</th><th>Source</th><th>Confidence</th></tr></thead><tbody><tr><td>Date of loss</td><td>2026-10-02 08:40</td><td>Call transcript</td><td style="color:var(--forest); font-weight:700;">High</td></tr><tr><td>Location</td><td>Route 9, northbound exit 14</td><td>Call transcript</td><td style="color:var(--forest); font-weight:700;">High</td></tr><tr><td>Vehicle</td><td>2021 Hatchback, plate on file</td><td>Policy match</td><td style="color:var(--forest); font-weight:700;">High</td></tr><tr><td>Injuries reported</td><td>None stated</td><td>Call transcript</td><td style="color:var(--amber); font-weight:700;">Confirm with caller</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Edit Field</button><button class="app-btn btn-primary">Confirm Summary &amp; Open Claim</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 1.1 Alignment: Intake Normalisation Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: Claims Intake Agent</span>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 1.2</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Coverage Verification with Clause Citations</span>
+        </div>
+        <span class="slide-stage-badge">Step T2 Coverage verification</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP S2)</span><span>Manual PDF Policy Reading</span></div><div class="contrast-body">The adjuster reads the PDF policy by hand to confirm coverage and deductible, adding about 1.5 days before any other work can start.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>Cited Coverage Decision</span></div><div class="contrast-body">The coverage agent reads the policy and returns the coverage result with clause citations. The adjuster accepts or overrides in one action.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Coverage Check Elapsed Time: As-Is vs Target</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='80' y='40' width='120' height='36' rx='3' fill='#ef4444'/><text x='140' y='62' font-size='11' font-weight='800' font-family='sans-serif' fill='#ffffff' text-anchor='middle'>About 1.5 days</text><text x='140' y='95' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is manual policy read</text><rect x='260' y='40' width='20' height='36' rx='3' fill='#10b981'/><text x='300' y='62' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46'>Minutes, cited</text><text x='300' y='95' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155'>To-Be agent read</text><rect x='80' y='108' width='350' height='16' rx='3' fill='#eff6ff' stroke='#bfdbfe'/><text x='255' y='120' font-size='9' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>Human decision retained: accept or override</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://claims.northwindmutual.example/coverage/CLM-2026-004417</div>
+            </div>
+            <span class="chrome-role-badge">Role: Claims Adjuster</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item active">Coverage</div><div class="sidebar-item">Policy Text</div><div class="sidebar-item">Deductible</div><div class="sidebar-item">Decision</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Coverage result for CLM-2026-004417</span><span class="status-badge badge-green">Covered</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Item</th><th>Result</th><th>Policy Clause</th><th>Note</th></tr></thead><tbody><tr><td>Collision coverage</td><td style="color:var(--forest); font-weight:700;">Included</td><td>Section 4.2</td><td>Active on date of loss</td></tr><tr><td>Deductible</td><td>500</td><td>Schedule A</td><td>Applies to collision</td></tr><tr><td>Rental reimbursement</td><td style="color:var(--forest); font-weight:700;">Included</td><td>Section 6.1</td><td>Up to 30 days</td></tr><tr><td>Exclusions</td><td style="color:var(--forest); font-weight:700;">None triggered</td><td>Section 9</td><td>Checked 12 exclusions</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Override Coverage</button><button class="app-btn btn-primary">Accept Coverage Decision</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 1.2 Alignment: Coverage Verification Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: Claims Adjuster</span>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 1.3</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Estimate Reconciliation Against Regional Benchmark</span>
+        </div>
+        <span class="slide-stage-badge">Step T4 Estimate reconciliation</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP S4)</span><span>Estimates by Fax and Email</span></div><div class="contrast-body">The adjuster waits for the body-shop estimate by fax or email, and variance against actual repair cost is only reviewed monthly.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>Benchmark Flag at Submission</span></div><div class="contrast-body">The estimate agent compares each estimate to the regional benchmark and flags any variance above 15% before the adjuster approves.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Estimate vs Regional Benchmark with 15% Tolerance Band</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='40' y='60' width='400' height='30' fill='#ecfdf5' stroke='#a7f3d0'/><text x='436' y='56' font-size='9' font-weight='700' font-family='sans-serif' fill='#065f46' text-anchor='end'>Tolerance band: benchmark plus or minus 15%</text><line x1='40' y1='75' x2='440' y2='75' stroke='#1e3a8a' stroke-width='1.5' stroke-dasharray='4 3'/><circle cx='110' cy='78' r='7' fill='#10b981'/><circle cx='200' cy='70' r='7' fill='#10b981'/><circle cx='290' cy='82' r='7' fill='#10b981'/><circle cx='380' cy='36' r='8' fill='#ef4444'/><text x='380' y='22' font-size='9' font-weight='800' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>Flag: +22%</text><text x='110' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop A</text><text x='200' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop B</text><text x='290' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop C</text><text x='380' y='145' font-size='9' font-family='sans-serif' fill='#334155' text-anchor='middle'>Shop D</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://claims.northwindmutual.example/estimates/CLM-2026-004417</div>
+            </div>
+            <span class="chrome-role-badge">Role: Claims Adjuster</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item">Estimates</div><div class="sidebar-item active">Benchmark</div><div class="sidebar-item">Photos</div><div class="sidebar-item">Decision</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Estimate review for CLM-2026-004417</span><span class="status-badge badge-amber">1 Flag</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Body Shop</th><th>Estimate</th><th>Benchmark</th><th>Variance</th></tr></thead><tbody><tr><td>Shop A</td><td>3,820</td><td>3,900</td><td style="color:var(--forest); font-weight:700;">-2%</td></tr><tr><td>Shop B</td><td>4,010</td><td>3,900</td><td style="color:var(--forest); font-weight:700;">+3%</td></tr><tr><td>Shop C</td><td>3,650</td><td>3,900</td><td style="color:var(--forest); font-weight:700;">-6%</td></tr><tr><td>Shop D</td><td>4,760</td><td>3,900</td><td style="color:var(--amber); font-weight:700;">+22% over tolerance</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Request Revised Estimate</button><button class="app-btn btn-primary">Approve Estimate</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 1.3 Alignment: Estimate Reconciliation Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: Claims Adjuster</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="role-risk" class="role-panel">
+    <div class="persona-hero">
+      <div class="persona-img-wrap"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Claims management team in a review meeting" class="persona-img"></div>
+      <div class="persona-info">
+        <div class="persona-role-title">SIU Investigator, Claims Manager &amp; Claims Finance Analyst</div>
+        <div class="persona-dept"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Special Investigations Unit, Claims Management &amp; Finance</div>
+        <div class="persona-mission">Screens every claim for fraud, approves settlements within delegated authority, and releases payment without duplicates.</div>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 2.1</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Fraud Pre-Scoring on Every Claim</span>
+        </div>
+        <span class="slide-stage-badge">Step T3 Fraud pre-score</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP S3)</span><span>Email Referrals to SIU</span></div><div class="contrast-body">Fraud screening is handled by email to the Special Investigations Unit, so only 8% of claims are screened before payment.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>100% Scored, Humans Review High Scores</span></div><div class="contrast-body">The fraud agent scores every claim through the external scoring service. The SIU investigator reviews only claims scoring 70 or higher.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Fraud Screening Coverage and Score Threshold</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x='40' y='30' width='400' height='22' rx='3' fill='#f1f5f9' stroke='#cbd5e1'/><rect x='40' y='30' width='32' height='22' rx='3' fill='#ef4444'/><text x='46' y='24' font-size='9' font-weight='700' font-family='sans-serif' fill='#991b1b'>As-Is: 8% screened</text><rect x='40' y='80' width='400' height='22' rx='3' fill='#10b981'/><text x='46' y='74' font-size='9' font-weight='700' font-family='sans-serif' fill='#065f46'>To-Be: 100% scored</text><line x1='40' y1='128' x2='440' y2='128' stroke='#cbd5e1' stroke-width='1.5'/><line x1='320' y1='118' x2='320' y2='138' stroke='#ef4444' stroke-width='2'/><text x='320' y='150' font-size='9' font-weight='700' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>Score 70: SIU review</text><text x='40' y='150' font-size='9' font-family='sans-serif' fill='#64748b'>0</text><text x='440' y='150' font-size='9' font-family='sans-serif' fill='#64748b' text-anchor='end'>100</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://claims.northwindmutual.example/siu/queue</div>
+            </div>
+            <span class="chrome-role-badge">Role: SIU Investigator</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item active">Review Queue</div><div class="sidebar-item">Score Detail</div><div class="sidebar-item">Evidence</div><div class="sidebar-item">Decision</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Claims with fraud score of 70 or higher</span><span class="status-badge badge-amber">3 To Review</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Claim</th><th>Score</th><th>Top Signal</th><th>Status</th></tr></thead><tbody><tr><td>CLM-2026-004102</td><td style="color:var(--amber); font-weight:700;">88</td><td>Repeated address across 4 claims</td><td>Open</td></tr><tr><td>CLM-2026-004289</td><td style="color:var(--amber); font-weight:700;">76</td><td>Loss reported 3 days after policy start</td><td>Open</td></tr><tr><td>CLM-2026-004390</td><td style="color:var(--amber); font-weight:700;">71</td><td>Estimate far above benchmark</td><td>In review</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Clear Claim</button><button class="app-btn btn-primary">Escalate to Investigation</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 2.1 Alignment: Fraud Pre-Scoring Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: SIU Investigator</span>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 2.2</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Settlement Authority Routing</span>
+        </div>
+        <span class="slide-stage-badge">Step T5 Authority routing</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP S5)</span><span>Spreadsheet Authority Limits</span></div><div class="contrast-body">Authority limits live in a spreadsheet and claims above limit are routed by email, giving a 6.2 day average settlement cycle.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>Rule-Based Routing to the Right Approver</span></div><div class="contrast-body">The authority agent routes each settlement by amount: up to 5,000 to the adjuster, up to 25,000 to the team lead, above that to the claims manager. Target cycle is 2.5 days.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Settlement Authority Tiers and Cycle Time</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x='40' y='100' width='120' height='30' rx='3' fill='#eff6ff' stroke='#bfdbfe'/><text x='100' y='119' font-size='9.5' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>Up to 5,000: Adjuster</text><rect x='170' y='70' width='120' height='60' rx='3' fill='#dbeafe' stroke='#93c5fd'/><text x='230' y='104' font-size='9.5' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>Up to 25,000: Team lead</text><rect x='300' y='40' width='130' height='90' rx='3' fill='#1e3a8a'/><text x='365' y='89' font-size='9.5' font-weight='700' font-family='sans-serif' fill='#ffffff' text-anchor='middle'>Above: Claims manager</text><text x='40' y='28' font-size='10' font-weight='800' font-family='sans-serif' fill='#991b1b'>Cycle 6.2 days</text><text x='160' y='28' font-size='10' font-weight='800' font-family='sans-serif' fill='#334155'>to</text><text x='185' y='28' font-size='10' font-weight='800' font-family='sans-serif' fill='#065f46'>2.5 days target</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://claims.northwindmutual.example/authority/CLM-2026-004417</div>
+            </div>
+            <span class="chrome-role-badge">Role: Claims Manager</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item active">Approvals</div><div class="sidebar-item">Authority Rules</div><div class="sidebar-item">History</div><div class="sidebar-item">Audit</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Settlement approval for CLM-2026-004417</span><span class="status-badge badge-amber">Awaiting Approver</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Item</th><th>Value</th><th>Rule Applied</th><th>Routed To</th></tr></thead><tbody><tr><td>Settlement amount</td><td>31,400</td><td>Above 25,000</td><td>Claims Manager</td></tr><tr><td>Fraud score</td><td>22</td><td>Below 70</td><td>No SIU review</td></tr><tr><td>Coverage</td><td>Confirmed</td><td>Clause 4.2</td><td>Adjuster accepted</td></tr><tr><td>Estimate variance</td><td>-2%</td><td>Within 15%</td><td>Adjuster approved</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Return to Adjuster</button><button class="app-btn btn-primary">Approve Settlement</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 2.2 Alignment: Authority Routing Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: Claims Manager</span>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 2.3</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Payout Release with Duplicate Check</span>
+        </div>
+        <span class="slide-stage-badge">Step T6 Payout release</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP S6)</span><span>Manually Keyed Payments</span></div><div class="contrast-body">Finance keys each payment by hand, and duplicate payments are found in 0.7% of payouts.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>Agent-Prepared Payment, Human Release</span></div><div class="contrast-body">The payment agent prepares the payment in the treasury system with an automatic duplicate check. The finance analyst releases it. Target is zero duplicate payments.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Duplicate Payment Rate: As-Is vs Target</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><rect x='120' y='60' width='90' height='70' rx='3' fill='#ef4444'/><text x='165' y='54' font-size='12' font-weight='800' font-family='sans-serif' fill='#991b1b' text-anchor='middle'>0.7%</text><text x='165' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>As-Is duplicates</text><rect x='270' y='127' width='90' height='3' rx='1' fill='#10b981'/><text x='315' y='120' font-size='12' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>0%</text><text x='315' y='145' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Target duplicates</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://claims.northwindmutual.example/payments/CLM-2026-004417</div>
+            </div>
+            <span class="chrome-role-badge">Role: Claims Finance Analyst</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item active">Payments</div><div class="sidebar-item">Duplicate Check</div><div class="sidebar-item">Payee</div><div class="sidebar-item">Audit</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Payment for CLM-2026-004417</span><span class="status-badge badge-green">Duplicate Check Clear</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Check</th><th>Result</th><th>Detail</th><th>Owner</th></tr></thead><tbody><tr><td>Approval on file</td><td style="color:var(--forest); font-weight:700;">Yes</td><td>Claims Manager, 31,400</td><td>Authority agent</td></tr><tr><td>Duplicate payment</td><td style="color:var(--forest); font-weight:700;">None found</td><td>Checked payee, amount, claim</td><td>Payment agent</td></tr><tr><td>Payee details</td><td style="color:var(--forest); font-weight:700;">Verified</td><td>Matches policy holder</td><td>Payment agent</td></tr><tr><td>Release</td><td style="color:var(--amber); font-weight:700;">Waiting</td><td>Human release required</td><td>Finance Analyst</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Hold Payment</button><button class="app-btn btn-primary">Release Payment</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 2.3 Alignment: Payout Release Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: Claims Finance Analyst</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function showRole(roleId) {
+    document.querySelectorAll('.role-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-role') === roleId);
+    });
+    document.querySelectorAll('.role-panel').forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === 'role-' + roleId);
+    });
+  }
+
+  function updateAlignment() {
+    var total = document.querySelectorAll('.signoff-box').length;
+    var checked = document.querySelectorAll('.signoff-box:checked').length;
+    var pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    var counter = document.getElementById('alignment-counter');
+    var fill = document.getElementById('alignment-fill');
+    var pctEl = document.getElementById('alignment-pct');
+
+    if (counter) counter.innerText = checked + ' of ' + total + ' Slides Signed Off';
+    if (fill) fill.style.width = pct + '%';
+    if (pctEl) pctEl.innerText = pct + '% Complete';
+  }
+</script>
+
+</body>
+</html>

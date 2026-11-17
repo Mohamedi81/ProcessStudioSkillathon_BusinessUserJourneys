@@ -1,0 +1,23 @@
+# Vocabulary harvested from the Drinkit v11 deck. Pass to validate_deck.py --forbid
+# when building a deck for ANY OTHER blueprint: none of these may appear.
+Drinkit
+drinkit.com
+DRK
+S/4HANA
+SAP
+Specright
+DocuSign
+LIMS
+Botanical Lime
+Lyon
+Dortmund
+Zurich
+Steviol
+Ashwagandha
+Halal
+Kosher
+BOM
+RCN
+G5
+60/30/10
+Gate Pack

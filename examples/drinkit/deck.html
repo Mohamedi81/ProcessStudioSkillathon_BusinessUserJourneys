@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persona Change Journeys &amp; Operational Dashboards (regression sample)</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --slide-bg: #ffffff;
+      --surface: #f8fafc;
+      --surface-dark: #1e293b;
+      --border: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #334155;
+      --text-light: #64748b;
+      --navy: #1e3a8a;
+      --navy-light: #eff6ff;
+      --navy-border: #bfdbfe;
+      --forest: #065f46;
+      --forest-light: #ecfdf5;
+      --forest-border: #a7f3d0;
+      --crimson: #991b1b;
+      --crimson-light: #fef2f2;
+      --crimson-border: #fecaca;
+      --amber: #92400e;
+      --amber-light: #fffbeb;
+      --amber-border: #fde68a;
+      --blue: #2563eb;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.4;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* Executive Top Bar */
+    .deck-topbar {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .deck-title-group h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.3px;
+    }
+    .deck-kicker {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Alignment Tracker Bar */
+    .alignment-bar {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 14px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #ffffff;
+    }
+    .alignment-label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .alignment-meter-wrap {
+      flex: 1;
+      min-width: 240px;
+      max-width: 480px;
+    }
+    .alignment-meter {
+      background: #334155;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+    .alignment-fill {
+      background: #10b981;
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .alignment-stat {
+      font-size: 13px;
+      font-weight: 800;
+      color: #34d399;
+    }
+
+    /* Role Nav Buttons */
+    .role-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .role-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #cbd5e1;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .role-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .role-btn.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+    }
+    .role-btn svg { flex-shrink: 0; }
+
+    /* Role Panels */
+    .role-panel { display: none; }
+    .role-panel.active { display: block; }
+
+    /* Persona Hero with Business Photography */
+    .persona-hero {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 28px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    }
+    @media (max-width: 900px) {
+      .persona-hero { grid-template-columns: 1fr; }
+    }
+    .persona-img-wrap {
+      width: 100%;
+      height: 180px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-dark);
+      background: #f1f5f9;
+    }
+    .persona-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .persona-role-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .persona-dept {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .persona-mission {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* 16:9 Presentation Slide Card */
+    .slide-canvas {
+      background: var(--slide-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .slide-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .slide-num-tag {
+      background: var(--navy-light);
+      color: var(--navy);
+      border: 1px solid var(--navy-border);
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+    .slide-main-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .slide-stage-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-light);
+      background: var(--surface);
+      border: 1px solid var(--border-dark);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* WIDESCREEN 16:9 PRESENTATION GRID */
+    .slide-content-grid {
+      display: grid;
+      grid-template-columns: 46% 54%;
+      gap: 22px;
+      align-items: stretch;
+    }
+    @media (max-width: 1080px) {
+      .slide-content-grid { grid-template-columns: 1fr; }
+    }
+
+    /* LEFT SIDE: BEFORE/AFTER CONTRAST & BESPOKE SVG GRAPHIC */
+    .left-insights-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contrast-box {
+      border-radius: 6px;
+      padding: 12px 14px;
+      border: 1px solid;
+    }
+    .contrast-box.before {
+      background: var(--crimson-light);
+      border-color: var(--crimson-border);
+    }
+    .contrast-box.after {
+      background: var(--forest-light);
+      border-color: var(--forest-border);
+    }
+
+    .contrast-head {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .before .contrast-head { color: var(--crimson); }
+    .after .contrast-head { color: var(--forest); }
+
+    .contrast-body {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    /* BESPOKE TOPIC GRAPHIC CONTAINER */
+    .topic-graphic-card {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .graphic-head {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+    .graphic-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    .graphic-svg {
+      width: 100%;
+      height: auto;
+      max-height: 180px;
+    }
+
+    /* RIGHT SIDE: EXPANSIVE ENTERPRISE SOFTWARE WIREFRAME */
+    .wireframe-full-card {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .app-chrome {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      border-bottom: 1px solid #334155;
+    }
+    .chrome-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chrome-dots {
+      display: flex;
+      gap: 4px;
+    }
+    .chrome-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #475569;
+    }
+    .chrome-url {
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+    }
+    .chrome-role-badge {
+      background: #334155;
+      color: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+
+    .app-workspace {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      min-height: 290px;
+      background: #ffffff;
+    }
+    @media (max-width: 600px) {
+      .app-workspace { grid-template-columns: 1fr; }
+    }
+
+    .app-sidebar {
+      background: #f8fafc;
+      border-right: 1px solid var(--border);
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-item {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-light);
+      padding: 6px 8px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .sidebar-item.active {
+      background: var(--navy-light);
+      color: var(--navy);
+      border: 1px solid var(--navy-border);
+    }
+
+    .app-canvas {
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      background: #ffffff;
+    }
+
+    .app-section-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid;
+    }
+    .badge-green { background: var(--forest-light); color: var(--forest); border-color: var(--forest-border); }
+    .badge-amber { background: var(--amber-light); color: var(--amber); border-color: var(--amber-border); }
+    .badge-navy { background: var(--navy-light); color: var(--navy); border-color: var(--navy-border); }
+
+    .app-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .app-table th {
+      background: #f8fafc;
+      border: 1px solid var(--border-dark);
+      padding: 5px 8px;
+      text-align: left;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-light);
+    }
+    .app-table td {
+      border: 1px solid var(--border-dark);
+      padding: 5px 8px;
+    }
+
+    .app-action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      align-items: center;
+    }
+    .app-btn {
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-primary { background: var(--navy); color: #ffffff; border-color: var(--navy); }
+    .btn-secondary { background: #ffffff; color: var(--text); border-color: var(--border-dark); }
+    .btn-danger { background: var(--crimson); color: #ffffff; border-color: var(--crimson); }
+
+    /* Slide Bottom Sign-Off Bar */
+    .slide-footer-bar {
+      border-top: 2px solid var(--border);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    .signoff-label {
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .signoff-box {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--forest);
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="deck-topbar">
+    <div class="deck-title-group">
+      <div class="deck-kicker">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Drinkit Global Innovation · Executive Alignment Deck
+      </div>
+      <h1>Persona Change Journeys &amp; Operational Dashboards (regression sample)</h1>
+    </div>
+  </div>
+
+  <div class="alignment-bar">
+    <div class="alignment-label">
+      Executive Stakeholder Alignment: <span id="alignment-counter" style="color:#38bdf8;">0 of 1 Slides Signed Off</span>
+    </div>
+    <div class="alignment-meter-wrap">
+      <div class="alignment-meter">
+        <div id="alignment-fill" class="alignment-fill"></div>
+      </div>
+    </div>
+    <div class="alignment-stat" id="alignment-pct">0% Complete</div>
+  </div>
+
+  <div class="role-nav">
+    <button class="role-btn active" data-role="rd" onclick="showRole('rd')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg> R&amp;D Formulation &amp; Pack</button>
+  </div>
+
+
+  <div id="role-rd" class="role-panel active">
+    <div class="persona-hero">
+      <div class="persona-img-wrap"><img src="https://images.unsplash.com/photo-1581093458791-9f3c3250a8b0?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Formulation Scientist at Lyon Innovation Center" class="persona-img"></div>
+      <div class="persona-info">
+        <div class="persona-role-title">Formulation Scientist &amp; Packaging Engineer (R&amp;D-F / PKG)</div>
+        <div class="persona-dept"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Lyon Innovation Centre &amp; Global Packaging Engineering Hub</div>
+        <div class="persona-mission">Translates marketing concept briefs into compliant liquid formulas and packaging structures, ensuring regulatory limit adherence, pilot plant reproducibility, and strict unit Bill of Materials (BOM) target economics.</div>
+      </div>
+    </div>
+
+    <div class="slide-canvas">
+      <div class="slide-header">
+        <div class="slide-header-left">
+          <span class="slide-num-tag">Slide 1.1</span>
+          <span class="slide-main-title"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg> R&amp;D Formulation &amp; Packaging Specification Linkage</span>
+        </div>
+        <span class="slide-stage-badge">Stage 3.1 &amp; 3.2 Product &amp; Pack Design · Gates 1 to 2</span>
+      </div>
+      <div class="slide-content-grid">
+        <div class="left-insights-col">
+          <div class="contrast-box before"><div class="contrast-head"><span>As-Is Manual Baseline (SOP 3.1.1, 3.2.1)</span><span>Fragmented Disconnected Specs</span></div><div class="contrast-body">Liquid recipes kept in Word documents on local shared drives; packaging specs created separately in Specright PLM Lite; zero real-time link to Finance BOM costing models.</div></div>
+          <div class="contrast-box after"><div class="contrast-head"><span>Target To-Be Execution</span><span>Unified Digital Specification Thread</span></div><div class="contrast-body">Single studio record connects liquid recipe and packaging dimensions. Live Bill of Materials (BOM) calculator verifies unit cost against target gross margin hurdles automatically.</div></div>
+          <div class="topic-graphic-card">
+            <div class="graphic-head"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Unit Bill of Materials (BOM) Cost Waterfall vs Hurdle</div>
+            <div class="graphic-body">
+              <svg class="graphic-svg" viewBox="0 0 460 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+<line x1='40' y1='130' x2='440' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><line x1='40' y1='20' x2='40' y2='130' stroke='#cbd5e1' stroke-width='1.5'/><line x1='40' y1='45' x2='440' y2='45' stroke='#ef4444' stroke-width='1.5' stroke-dasharray='4 3'/><text x='435' y='40' font-size='9' font-weight='700' font-family='sans-serif' fill='#ef4444' text-anchor='end'>Hurdle Ceiling: EUR 0.250</text><rect x='65' y='65' width='55' height='65' rx='3' fill='#3b82f6'/><text x='92' y='60' font-size='10' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>0.129</text><text x='92' y='143' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Liquid Spec</text><rect x='150' y='82' width='55' height='48' rx='3' fill='#60a5fa'/><text x='177' y='77' font-size='10' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>0.095</text><text x='177' y='143' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>PLM Can</text><rect x='235' y='121' width='55' height='9' rx='2' fill='#93c5fd'/><text x='262' y='116' font-size='10' font-weight='700' font-family='sans-serif' fill='#1e3a8a' text-anchor='middle'>0.018</text><text x='262' y='143' font-size='9' font-weight='600' font-family='sans-serif' fill='#334155' text-anchor='middle'>Corrugate</text><rect x='320' y='49' width='65' height='81' rx='4' fill='#10b981'/><text x='352' y='43' font-size='11' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>0.242</text><text x='352' y='143' font-size='9.5' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>Total BOM</text><rect x='395' y='65' width='40' height='20' rx='3' fill='#ecfdf5' stroke='#a7f3d0'/><text x='415' y='78' font-size='9' font-weight='800' font-family='sans-serif' fill='#065f46' text-anchor='middle'>PASS</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="wireframe-full-card">
+          <div class="app-chrome">
+            <div class="chrome-left">
+              <div class="chrome-dots"><div class="chrome-dot"></div><div class="chrome-dot"></div><div class="chrome-dot"></div></div>
+              <div class="chrome-url"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> https://innovation.drinkit.com/lab/spec/SPEC-DRK-882</div>
+            </div>
+            <span class="chrome-role-badge">Role: Formulation Scientist</span>
+          </div>
+          <div class="app-workspace">
+            <div class="app-sidebar"><div class="sidebar-item active">Recipe Spec</div><div class="sidebar-item">Pack Hierarchy</div><div class="sidebar-item">SAP BOM</div><div class="sidebar-item">Regulatory</div></div>
+            <div class="app-canvas">
+              <div>
+                <div class="app-section-title"><span>Botanical Lime 330ml Can (Formula v2.1)</span><span class="status-badge badge-green">Target BOM Met</span></div>
+                
+                <table class="app-table" style="margin-top:8px;"><thead><tr><th>Component / Layer</th><th>Spec Detail</th><th>Supplier Code</th><th>Unit Cost</th></tr></thead><tbody><tr><td>Steviol Glycosides (Reb M 95%)</td><td>180 mg/L dosage</td><td>SUP-ING-041</td><td>EUR 0.018</td></tr><tr><td>Ashwagandha Extract (5% Withanolides)</td><td>300 mg/L dosage</td><td>SUP-ING-088</td><td>EUR 0.045</td></tr><tr><td>330ml Sleek Can (Specright PLM)</td><td>PLM-CAN-330 (202 Dia)</td><td>SUP-PKG-102</td><td>EUR 0.095</td></tr><tr style="background:#f8fafc; font-weight:700;"><td colspan="3">Total Unit BOM (SAP S/4HANA #BOM-99214)</td><td style="color:var(--forest); font-weight:700;">EUR 0.242 / unit</td></tr></tbody></table>
+              </div>
+              <div class="app-action-bar"><button class="app-btn btn-secondary">Adjust Dosages</button><button class="app-btn btn-primary">Freeze Recipe &amp; Lock BOM</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer-bar">
+        <label class="signoff-label">
+          <input type="checkbox" class="signoff-box" onchange="updateAlignment()">
+          <span>Slide 1.1 Alignment: Formulation &amp; Packaging Specification Linkage Approved</span>
+        </label>
+        <span style="color:var(--text-light);">Owner: Formulation Scientist &amp; Packaging Engineer</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function showRole(roleId) {
+    document.querySelectorAll('.role-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-role') === roleId);
+    });
+    document.querySelectorAll('.role-panel').forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === 'role-' + roleId);
+    });
+  }
+
+  function updateAlignment() {
+    var total = document.querySelectorAll('.signoff-box').length;
+    var checked = document.querySelectorAll('.signoff-box:checked').length;
+    var pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    var counter = document.getElementById('alignment-counter');
+    var fill = document.getElementById('alignment-fill');
+    var pctEl = document.getElementById('alignment-pct');
+
+    if (counter) counter.innerText = checked + ' of ' + total + ' Slides Signed Off';
+    if (fill) fill.style.width = pct + '%';
+    if (pctEl) pctEl.innerText = pct + '% Complete';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{DECK_TITLE_TEXT}}</title>
+  <style>
+{{CSS}}
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="deck-topbar">
+    <div class="deck-title-group">
+      <div class="deck-kicker">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        {{DECK_KICKER}}
+      </div>
+      <h1>{{DECK_TITLE}}</h1>
+    </div>
+  </div>
+
+  <div class="alignment-bar">
+    <div class="alignment-label">
+      {{ALIGNMENT_LABEL}}: <span id="alignment-counter" style="color:#38bdf8;">0 of {{TOTAL_SLIDES}} Slides Signed Off</span>
+    </div>
+    <div class="alignment-meter-wrap">
+      <div class="alignment-meter">
+        <div id="alignment-fill" class="alignment-fill"></div>
+      </div>
+    </div>
+    <div class="alignment-stat" id="alignment-pct">0% Complete</div>
+  </div>
+
+  <div class="role-nav">
+{{ROLE_TABS}}
+  </div>
+
+{{ROLE_PANELS}}
+
+</div>
+
+<script>
+  function showRole(roleId) {
+    document.querySelectorAll('.role-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-role') === roleId);
+    });
+    document.querySelectorAll('.role-panel').forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === 'role-' + roleId);
+    });
+  }
+
+  function updateAlignment() {
+    var total = document.querySelectorAll('.signoff-box').length;
+    var checked = document.querySelectorAll('.signoff-box:checked').length;
+    var pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    var counter = document.getElementById('alignment-counter');
+    var fill = document.getElementById('alignment-fill');
+    var pctEl = document.getElementById('alignment-pct');
+
+    if (counter) counter.innerText = checked + ' of ' + total + ' Slides Signed Off';
+    if (fill) fill.style.width = pct + '%';
+    if (pctEl) pctEl.innerText = pct + '% Complete';
+  }
+</script>
+
+</body>
+</html>
