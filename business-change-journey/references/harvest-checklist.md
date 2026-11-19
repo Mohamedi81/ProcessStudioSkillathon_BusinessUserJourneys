@@ -1,10 +1,13 @@
 # Harvest Checklist: Blueprint + SOP -> Deck Spec
 
-Run this BEFORE writing any slide. Output a short "harvest table" for the user to confirm.
+Run this BEFORE writing any slide. Build a short harvest table (section E) for yourself and use it to write the spec. Do not stop to ask the user to confirm it.
 
 ## A. Inputs to read
-1. As-Is SOP / process description (steps, owners, tools, pain points).
-2. To-Be blueprint (EAEF / ATS register, Autonomy Zones, HITL table, agent/data-product list, MCP tools).
+One of these is enough:
+1. To-Be blueprint (EAEF / ATS register, Autonomy Zones, HITL table, agent/data-product list, MCP tools).
+2. Process analysis (measured bottlenecks, root causes, optimization measures, target KPIs, blueprint hand-off).
+
+Optional: As-Is SOP / process description (steps, owners, tools, pain points). It adds detail but is not required.
 
 ## B. Extract these (with the source line for each)
 | # | Item | Where to look | Becomes |
@@ -43,5 +46,5 @@ Run this BEFORE writing any slide. Output a short "harvest table" for the user t
 Palette: navy `#1e3a8a`, blue `#3b82f6`, pass green `#10b981`/`#065f46`, warn amber `#f59e0b`/`#92400e`,
 fail red `#ef4444`, grey text `#64748b`. Font `sans-serif`, sizes 7.5-13.
 
-## E. Harvest table to show the user (confirm before building)
+## E. Harvest table (working notes, not shown for confirmation)
 `Persona | Source role | Slides (title, stage) | System | Key number`

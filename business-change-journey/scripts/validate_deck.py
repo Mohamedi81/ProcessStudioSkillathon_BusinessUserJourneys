@@ -28,9 +28,7 @@ BOX_REQ = ["head_left", "head_right", "body"]
 GRAPHIC_REQ = ["title", "svg"]
 WF_REQ = ["url_path", "sidebar", "active_sidebar", "section_title", "table", "actions"]
 
-EMOJI = re.compile(
-    "[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F000-\U0001F2FF\U00002B00-\U00002BFF\U0000231A-\U000023FF]"
-)
+EMOJI = "[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F000-\U0001F2FF\U00002B00-\U00002BFF\U0000231A-\U000023FF]"
 
 
 def walk_text(node):
@@ -85,7 +83,7 @@ def validate_spec(spec, forbid):
                 errors.append(f"{sw}.graphic.svg: scripts/event handlers not allowed")
 
     blob = "\n".join(walk_text(spec))
-    m = EMOJI.search(blob)
+    m = re.search(EMOJI, blob)
     if m:
         errors.append(f"style: emoji/pictograph found ({m.group(0)!r}); design rules forbid emojis")
     for term in forbid:

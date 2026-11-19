@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build_journey_deck.py": {
+      "arguments": {
+        "--input": { "type": "input_path", "required": true },
+        "--output": { "type": "output_path", "required": true }
+      }
+    }
+  }
+}
