@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a deck spec (JSON) into a single-file Business Change Journey HTML deck.
+"""Render a deck spec (JSON) into a single-file Business Experience Shifts HTML deck.
 
 Usage: python3 build_deck.py <deck-spec.json> <output.html>
 

@@ -1,25 +1,33 @@
 ---
-name: business-change-journey
-description: Turns a To-Be process blueprint, or a process-analysis report (bottlenecks, root causes, optimization measures), into a single-file HTML change-journey deck for business stakeholders. Each role gets As-Is vs To-Be slides, a bespoke infographic, an enterprise UI wireframe and a sign-off tracker. An As-Is SOP is optional. Use when the user wants stakeholder alignment slides or a change journey from a blueprint or analysis.
+name: business-experience-shifts
+description: Turns a To-Be process blueprint, or a process-analysis report (bottlenecks, root causes, optimization measures), into business experience shifts for stakeholder workshops. Each shift is one use case for one role, shown as As-Is vs To-Be with an infographic and an enterprise UI wireframe. Produces an HTML deck and an Excel review sheet where each use case gets a decision (Approved as-is, Approved with comments, Rejected), plus a PowerPoint deck on request. An As-Is SOP is optional. Use when the user wants stakeholder alignment, workshop use cases or before-and-after experience slides from a blueprint or analysis.
 allowed-tools: run_skill_script read_wiki_page write_temp_file read_temp_file save_output_text save_output_file
 ---
 
-# Business Change Journey Deck
+# Business Experience Shifts
 
 Inputs: ONE of these is enough. An As-Is SOP is optional and only adds detail.
 - a **To-Be blueprint** (roles, steps, systems, KPIs, human-approval points), or
 - a **process analysis** (measured As-Is bottlenecks plus planned fixes and target KPIs).
 
 If both a blueprint and an analysis are given, use the blueprint for roles and To-Be, and the analysis for As-Is numbers.
-Output: one HTML file (`journey-deck.html`). Never write code. You write one JSON file, and a bundled script renders it.
+A shift is one use case for one role: how the work runs today, how it runs after the change, and what the user sees. These are single-step use cases grouped by role. They are not end-to-end journeys, so never call them journeys.
+
+Outputs, every run:
+- `experience-shifts-deck.html`: the deck.
+- `review-sheet.xlsx`: one row per use case with a Decision dropdown (Approved as-is, Approved with comments, Rejected) and a Comments column. It is filled in during the workshop and returned.
+
+On request only: `experience-shifts-deck.pptx`, the same deck as editable PowerPoint.
+
+Never write code. You write one JSON file, and bundled scripts render it.
 
 ## Do not ask questions
 Work from what you were given. Do not wait for confirmation. Use these defaults and say so in your final message:
-- Deck title: the process name from the source plus " Change Journey". No company name unless the source has one.
-- `kicker`: "Business Change Journey".
+- Deck title: the process name from the source plus " Experience Shifts". No company name unless the source has one.
+- `kicker`: "Business Experience Shifts".
 - `app.base_url`: `app.internal.example`.
 - Photos: the neutral stock URLs under "Photos" below.
-- Only the HTML deck is produced. No PowerPoint.
+- PowerPoint is produced only if the user asks for it. The HTML deck and the Excel review sheet are always produced.
 - Record IDs, supplier and customer names in wireframes are made up: label them "illustrative" in `signoff_text`.
 - Any number or target not in the source is also "illustrative". Never present an invented figure as sourced.
 
@@ -28,9 +36,11 @@ Work from what you were given. Do not wait for confirmation. Use these defaults 
 2. **Harvest** (silently): the human roles, the steps each role owns, the system each step touches, As-Is pain with its number, the To-Be fix, and target numbers. Roles = distinct people who own a decision or approval. If the source names no roles, infer them from who normally does each step and say that you inferred them.
 3. **Size the deck**: 2 to 4 slides per role, one slide per atomic step or tightly coupled pair. Prefer steps with a measurable As-Is pain, a human decision, and a system touchpoint. Merge roles with fewer than 2 meaningful steps. Total slide count is derived, never preset.
 4. **Write the spec**: author `deck-spec.json` (format below) and save it with `write_temp_file`.
-5. **Build**: call `run_skill_script` with script `build_journey_deck.py`, `--input deck-spec.json`, `--output journey-deck.html`.
+5. **Build the deck**: call `run_skill_script` with script `build_html_deck.py`, `--input deck-spec.json`, `--output experience-shifts-deck.html`.
    - It validates the spec first. If it fails, the error lists every issue. Fix the spec, save it again, and rebuild. Repeat until it passes.
-6. **Deliver**: save `journey-deck.html` with `save_output_file`. Then reply with a short summary: roles and slide count, the defaults you used, and which numbers are illustrative.
+6. **Build the review sheet (always)**: call `run_skill_script` with script `build_review_sheet.py`, `--input deck-spec.json`, `--output review-sheet.xlsx`.
+7. **PowerPoint (only if the user asked)**: call `run_skill_script` with script `build_pptx_deck.py`, `--input deck-spec.json`, `--output experience-shifts-deck.pptx`. It does not embed role photos.
+8. **Deliver**: save each output file with `save_output_file`. Then reply with a short summary: roles and use-case count, the defaults you used, which numbers are illustrative, and that the workshop fills in the Decision column of `review-sheet.xlsx` and returns it. Offer PowerPoint if you did not build it.
 
 ## deck-spec.json format
 ```

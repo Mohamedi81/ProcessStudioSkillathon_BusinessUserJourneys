@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Validate a deck spec (JSON) and render it into a single-file HTML change-journey deck.
+"""Validate a deck spec (JSON) and render it into a single-file HTML experience-shifts deck.
 
-Usage: python3 build_journey_deck.py --input deck-spec.json --output journey-deck.html
+Usage: python3 build_html_deck.py --input deck-spec.json --output experience-shifts-deck.html
 
 Exit code 0: deck written. Exit code 1: spec problems are printed to stderr, one per line
 (fix the spec and run again). Standard library only; reads ../assets/ from the skill bundle.
@@ -14,7 +14,7 @@ from pathlib import Path
 import build_deck
 import validate_deck
 
-DEFAULT_OUTPUT_NAME = "journey-deck.html"
+DEFAULT_OUTPUT_NAME = "experience-shifts-deck.html"
 
 
 def main():
