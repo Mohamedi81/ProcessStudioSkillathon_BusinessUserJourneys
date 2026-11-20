@@ -15,7 +15,7 @@ A shift is one use case for one role: how the work runs today, how it runs after
 
 Outputs, every run:
 - `experience-shifts-deck.html`: the deck.
-- `review-sheet.xlsx`: one row per use case with a Decision dropdown (Approved as-is, Approved with comments, Rejected) and a Comments column. It is filled in during the workshop and returned.
+- `review-sheet.xlsx`: one row per use case with a Decision dropdown (Approved as-is, Approved with comments, Rejected) and a Comments column for the reason. It is filled in during the workshop and returned. The `apply-workshop-feedback` skill reads it back and produces the next version of the source document, so each row carries a `source_ref` to the item it came from.
 
 On request only: `experience-shifts-deck.pptx`, the same deck as editable PowerPoint.
 
@@ -46,6 +46,7 @@ Work from what you were given. Do not wait for confirmation. Use these defaults 
 ```
 {
   "deck": { "title": "...", "kicker": "...", "alignment_label": "Stakeholder Alignment",
+            "source_name": "<file name of the blueprint or analysis>", "source_version": "v1",
             "app": { "base_url": "app.internal.example" } },
   "personas": [ {
       "id": "buyer",                     // unique slug
@@ -60,6 +61,7 @@ Work from what you were given. Do not wait for confirmation. Use these defaults 
           "num": "1.1",                  // "<persona number>.<slide number>", persona numbers start at 1
           "title": "...", "icon": "clipboard",
           "stage_badge": "Requisition to PO",
+          "source_ref": "M5, W10",           // the blueprint or analysis items this use case comes from
           "as_is":  { "head_left": "As-Is", "head_right": "<source ref or key number>", "body": "<pain, with number>" },
           "to_be":  { "head_left": "To-Be", "head_right": "<target>", "body": "<target state>" },
           "graphic": { "title": "...", "icon": "chart", "svg": "<inner SVG markup for viewBox 0 0 460 160>" },
@@ -77,7 +79,7 @@ Work from what you were given. Do not wait for confirmation. Use these defaults 
   } ]
 }
 ```
-Required: everything above except `alignment_label`, `tab_icon`, `icon`, `role_badge`, `status`, `intro_html`.
+Required: everything above except `alignment_label`, `tab_icon`, `icon`, `role_badge`, `status`, `intro_html`, `source_name`, `source_version` and `source_ref`. Always fill those three anyway: `source_ref` must use the source document's own labels (measure, weakness, step or requirement IDs), so feedback can be traced back. `source_version` is the version stated in the source, or "v1" if none.
 - `active_sidebar` must equal one `sidebar` item.
 - Table cell = string or `{text, tone: green|amber|red}`; `status.tone`: green|amber|navy.
 - Icon keys: flask, calendar, shield, dollar, globe, users, file, chart, clock, check, pin, lock, briefcase, clipboard, settings, truck.
