@@ -11,6 +11,18 @@
           "required": true
         }
       }
+    },
+    "fill_review_sheet.py": {
+      "arguments": {
+        "--input": {
+          "type": "input_path",
+          "required": true
+        },
+        "--output": {
+          "type": "output_path",
+          "required": true
+        }
+      }
     }
   }
 }

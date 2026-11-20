@@ -69,8 +69,9 @@ def read(path):
         comment = cell_text(row[reason_col].value) if reason_col is not None else ""
         item = {
             "id": uid, "role": col(row, "Role"), "use_case": col(row, "Use case"),
-            "source_ref": col(row, "Source ref"), "owner": col(row, "Owner"),
-            "decision": decision or "Pending", "comment": comment,
+            "stage": col(row, "Stage"), "source_ref": col(row, "Source ref"), "owner": col(row, "Owner"),
+            "as_is": col(row, "As-Is"), "to_be": col(row, "To-Be"),
+            "decision": decision or "Pending", "comment": comment, "evidence": col(row, "Evidence"),
         }
         if raw and decision is None:
             problems.append(f"{uid}: decision '{raw}' is not one of {DECISIONS}")
