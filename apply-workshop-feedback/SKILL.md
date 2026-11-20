@@ -22,14 +22,19 @@ Outputs:
 Never write code. Bundled scripts read and write the sheet. You edit the document as text.
 
 ## Step 1: read the sheet
-Call `run_skill_script` with script `read_review_sheet.py`, `--input review-sheet.xlsx`, `--output feedback.json`. Read `feedback.json` with `read_temp_file`.
-- If it fails, the file is not a review sheet from this workflow. Report that and stop.
+Try the reader **once**. Call `run_skill_script` with script `read_review_sheet.py`, `--input <the uploaded sheet>`, `--output feedback.json`. Read `feedback.json` with `read_temp_file`.
 - `items` is the list of use cases with their `as_is` and `to_be` text. `counts` tells you the path: if some use cases already have a decision, treat the rest as pending.
+
+**If the reader is blocked or fails (for example `INPUT_INVALID`), do not stop and do not retry.** A blocked result comes from the platform, not from the user's file. Do not tell the user their file is wrong or has the wrong structure. Read the sheet from the text of the upload instead:
+1. Use the text content of the uploaded `.xlsx` that you can already see in the conversation (the preview). It lists the rows of the Review tab with their columns.
+2. Build the same `items` list yourself: for each row copy `id`, `role`, `use_case`, `stage`, `source_ref`, `as_is`, `to_be`, `owner`, `decision` and `comment` exactly as written. Copying what the user wrote is not inventing. Set `evidence` to `from uploaded sheet`. Accept a decision only if it is one of "Approved as-is", "Approved with comments", "Rejected". An empty or other value is Pending.
+3. If the preview is cut off, has no Decision column, or a row is unreadable, say which use cases you could not read and treat only those as Pending. If no row can be read at all, ask the user to paste the ID and Decision columns, then continue as Path C.
+4. Say in one line at the top of your reply that the sheet was read from the upload text because the file reader was unavailable.
 
 ## Step 2: get the decisions
 
 ### Path A: filled sheet
-Use `feedback.json` as it is. Go to Step 4.
+Use `feedback.json` (or the `items` you built from the upload text) as it is. Go to Step 4.
 
 ### Path B: unstructured notes or transcript
 Go through every use case in `items` and decide from the notes. Use these rules:
